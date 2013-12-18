@@ -15,7 +15,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using UnityEngine;
 
+using Object = System.Object;
 
 namespace LitJson
 {
@@ -330,6 +332,8 @@ namespace LitJson
 
                 if (inst_type.IsAssignableFrom (json_type))
                     return reader.Value;
+                if( inst_type == typeof(Single) && json_type == typeof(Double))
+                	return (float)(double)reader.Value;
 
                 // If there's a custom importer that fits, use it
                 if (custom_importers_table.ContainsKey (json_type) &&
@@ -591,7 +595,154 @@ namespace LitJson
                 delegate (object obj, JsonWriter writer) {
                     writer.Write ((ulong) obj);
                 };
+                
+            
+            /// extended for Unity
+			base_exporters_table [typeof(Vector2)] = ExportVector2;    
+            base_exporters_table [typeof(Vector3)] = ExportVector3;
+			base_exporters_table [typeof(Vector4)] = ExportVector4;
+			base_exporters_table [typeof(Bounds)] = ExportBounds;
+			base_exporters_table [typeof(Color)] = ExportColor;
+			base_exporters_table [typeof(Color32)] = ExportColor32;
+			base_exporters_table [typeof(Ray)] = ExportRay;
+			base_exporters_table [typeof(Rect)] = ExportRect;
+			base_exporters_table [typeof(Quaternion)] = ExportQuaternion;
+//			base_exporters_table [typeof(Transform)] = ExportTransform;
         }
+
+        private static void ExportVector2 (object obj, JsonWriter writer)
+		{
+			Vector2 v = (Vector2)obj;
+			writer.WriteObjectStart ();
+			writer.WritePropertyName ("x");
+			writer.Write (v.x);
+			writer.WritePropertyName ("y");
+			writer.Write (v.y);
+			writer.WriteObjectEnd ();
+		}
+
+		private static void ExportVector3 (object obj, JsonWriter writer)
+		{
+			Vector3 v = (Vector3)obj;
+			writer.WriteObjectStart ();
+			writer.WritePropertyName ("x");
+			writer.Write (v.x);
+			writer.WritePropertyName ("y");
+			writer.Write (v.y);
+			writer.WritePropertyName ("z");
+			writer.Write (v.z);
+			writer.WriteObjectEnd ();
+		}
+		private static void ExportVector4 (object obj, JsonWriter writer)
+		{
+			Vector4 v = (Vector4)obj;
+			writer.WriteObjectStart ();
+			writer.WritePropertyName ("x");
+			writer.Write (v.x);
+			writer.WritePropertyName ("y");
+			writer.Write (v.y);
+			writer.WritePropertyName ("z");
+			writer.Write (v.z);
+			writer.WritePropertyName ("w");
+			writer.Write (v.w);
+			writer.WriteObjectEnd ();
+		}
+		
+		private static void ExportBounds (object obj, JsonWriter writer)
+		{
+			Bounds v = (Bounds)obj;
+			writer.WriteObjectStart ();
+			writer.WritePropertyName ("center");
+			ExportVector3 (v.center, writer);
+			writer.WritePropertyName ("size");
+			ExportVector3 (v.size, writer);
+			writer.WriteObjectEnd ();
+		}
+
+		private static void ExportColor(object obj, JsonWriter writer)
+		{
+				Color v = (Color)obj;
+				writer.WriteObjectStart ();
+				writer.WritePropertyName ("r");
+				writer.Write (v.r);
+				writer.WritePropertyName ("g");
+				writer.Write (v.g);
+				writer.WritePropertyName ("b");
+				writer.Write (v.b);
+				writer.WritePropertyName ("a");
+				writer.Write (v.a);
+				writer.WriteObjectEnd ();
+		}
+
+		private static void ExportColor32(object obj, JsonWriter writer)
+		{
+				Color32 v = (Color32)obj;
+				writer.WriteObjectStart ();
+				writer.WritePropertyName ("r");
+				writer.Write (v.r);
+				writer.WritePropertyName ("g");
+				writer.Write (v.g);
+				writer.WritePropertyName ("b");
+				writer.Write (v.b);
+				writer.WritePropertyName ("a");
+				writer.Write (v.a);
+				writer.WriteObjectEnd ();
+		}
+
+		private static void ExportRay(object obj, JsonWriter writer)
+		{
+				Ray v = (Ray)obj;
+				writer.WriteObjectStart ();
+				writer.WritePropertyName ("origin");
+				ExportVector3 (v.origin, writer);
+				writer.WritePropertyName ("direction");
+				ExportVector3 (v.direction, writer);
+				writer.WriteObjectEnd ();
+		}
+
+		private static void ExportRect(object obj, JsonWriter writer) 
+		{
+				Rect v = (Rect)obj;
+				writer.WriteObjectStart ();
+				writer.WritePropertyName ("xMin");
+				writer.Write (v.xMin);
+				writer.WritePropertyName ("xMax");
+				writer.Write (v.xMax);
+				writer.WritePropertyName ("yMin");
+				writer.Write (v.yMin);
+				writer.WritePropertyName ("yMax");
+				writer.Write (v.yMax);
+				writer.WriteObjectEnd ();
+		}
+
+		private static void ExportQuaternion(object obj, JsonWriter writer)
+		{
+				Quaternion v = (Quaternion)obj;
+				writer.WriteObjectStart ();
+				writer.WritePropertyName ("x");
+				writer.Write (v.x);
+				writer.WritePropertyName ("y");
+				writer.Write (v.y);
+				writer.WritePropertyName ("z");
+				writer.Write (v.z);
+				writer.WritePropertyName ("w");
+				writer.Write (v.w);
+				writer.WriteObjectEnd ();
+		}
+
+//		private static void ExportTransform (object obj, JsonWriter writer)
+//		{
+//				Transform v = (Transform)obj;
+//				writer.WriteObjectStart ();
+//				writer.WritePropertyName ("localPosition");
+//				ExportVector3(v.localPosition, writer);
+//				writer.WritePropertyName ("localRotation");
+//				ExportQuaternion (v.localRotation, writer);
+//				writer.WritePropertyName ("localScale");
+//				ExportVector3 (v.localScale, writer);
+//				writer.WriteObjectEnd ();
+//		}
+
 
         private static void RegisterBaseImporters ()
         {
@@ -714,7 +865,12 @@ namespace LitJson
                 writer.Write ((double) obj);
                 return;
             }
-
+                        
+            if( obj is Single ){
+            	writer.Write((double)(float)obj);
+            	return;
+            }
+            
             if (obj is Int32) {
                 writer.Write ((int) obj);
                 return;
