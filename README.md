@@ -13,7 +13,7 @@ Check the webplayer demo at: http://tmpxyz.github.io/LitJSON/Web.html
 
 ## How to install into Unity
 
-Put the `LitJSON` folder into `Assets` folder.
+Put the `src/LitJSON` folder into `Assets` folder.
 
 ## Unity Code Example
 
