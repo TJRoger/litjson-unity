@@ -13,6 +13,10 @@ Check the webplayer demo at: http://tmpxyz.github.io/LitJSON/Web.html
 
 Put the `LitJSON` folder into `Assets` folder.
 
+## Unity Code Example
+
+Check https://github.com/TMPxyz/LitJSON-for-Unity/blob/master/src/LitJson/UnityExample/LitJSONTest.cs
+
 ## Tutorial
 
 Check the original Tutorial: http://lbv.github.io/litjson/docs/quickstart.html
