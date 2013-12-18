@@ -1,7 +1,7 @@
 LitJSON for Unity
 =======
 
-
+![Image](http://tmpxyz.github.io/Images/LitJson.jpg)
 
 Made some changes to make it more suited for Unity3D users;
 
