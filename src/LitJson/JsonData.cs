@@ -954,6 +954,74 @@ namespace LitJson
 
             return "Uninitialized JsonData";
         }
+
+        public bool Contains(object key)
+        {
+            return EnsureDictionary().Contains(key);
+        }
+        object Get(object key, object defaultValue)
+        {
+            return Contains(key) ? EnsureDictionary()[key] : defaultValue;
+        }
+        public float GetFloat(string key, float defaultValue)
+        {
+            return float.Parse(Get(key, defaultValue).ToString());
+        }
+
+        public float GetFloat(string key)
+        {
+            return float.Parse(Get(key).ToString());
+        }
+
+        public int GetInt(string key, int defaultValue)
+        {
+            return int.Parse(Get(key, defaultValue).ToString());
+        }
+
+        public int GetInt(string key)
+        {
+            return int.Parse(Get(key).ToString());
+        }
+
+        public bool GetBool(string key, bool defaultValue)
+        {
+            return bool.Parse(Get(key, defaultValue).ToString());
+        }
+        public bool GetBool(string key)
+        {
+            return bool.Parse(Get(key).ToString());
+        }
+        public string GetString(string key, string defaultValue)
+        {
+            return  Get(key, defaultValue).ToString() ;
+        }
+        public string GetString(string key)
+        {
+            return Get(key).ToString();
+        }
+
+        [Obsolete("返回值为JSONOBJECT，经常发生误解，不推荐外部显示调用")]
+        public object Get(object key)
+        {
+            return EnsureDictionary()[key];
+        }
+        public void Remove(object key)
+        {
+            EnsureDictionary().Remove(key);
+
+            for (int i = 0; i < object_list.Count; i++)
+            {
+                if (object_list[i].Key == (string)key)
+                {
+                    object_list.RemoveAt(i);
+                    break;
+                }
+            }
+
+            json = null;
+        }
+
+
     }
 
 
