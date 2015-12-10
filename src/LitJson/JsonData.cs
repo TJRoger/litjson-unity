@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
+using UnityEngine;
 
 
 namespace LitJson
@@ -426,6 +427,49 @@ namespace LitJson
             inst_string = str;
         }
 
+        public JsonData(Vector2 vector2)
+        {
+            SetJsonType(JsonType.Object);
+            inst_object["x"] = vector2.x;
+            inst_object["y"] = vector2.y;
+            ;
+        }
+
+        public JsonData(Vector3 vector3)
+        {
+            SetJsonType(JsonType.Object);
+            inst_object["x"] = vector3.x;
+            inst_object["y"] = vector3.y;
+            inst_object["z"] = vector3.z;
+        }
+
+        public JsonData(Vector4 vector4)
+        {
+            SetJsonType(JsonType.Object);
+            inst_object["x"] = vector4.x;
+            inst_object["y"] = vector4.y;
+            inst_object["z"] = vector4.z;
+            inst_object["w"] = vector4.w;
+        }
+
+        public JsonData(Quaternion quaternion)
+        {
+            SetJsonType(JsonType.Object);
+            inst_object["x"] = quaternion.x;
+            inst_object["y"] = quaternion.y;
+            inst_object["z"] = quaternion.z;
+            inst_object["w"] = quaternion.w;
+        }
+
+        public JsonData(Rect rect)
+        {
+            SetJsonType(JsonType.Object);
+            inst_object["x"] = rect.x;
+            inst_object["y"] = rect.y;
+            inst_object["w"] = rect.width;
+            inst_object["h"] = rect.height;
+        }
+
         #endregion
 
         #region Implicit Conversions
@@ -451,6 +495,31 @@ namespace LitJson
         }
 
         public static implicit operator JsonData(String data)
+        {
+            return new JsonData(data);
+        }
+
+        public static implicit operator JsonData(Vector2 data)
+        {
+            return new JsonData(data);
+        }
+
+        public static implicit operator JsonData(Vector3 data)
+        {
+            return new JsonData(data);
+        }
+
+        public static implicit operator JsonData(Vector4 data)
+        {
+            return new JsonData(data);
+        }
+
+        public static implicit operator JsonData(Quaternion data)
+        {
+            return new JsonData(data);
+        }
+
+        public static implicit operator JsonData(Rect data)
         {
             return new JsonData(data);
         }
@@ -1058,44 +1127,18 @@ namespace LitJson
             }
         }
 
-        public float GetFloat(string key, float defaultValue)
+        public T[] ConventToArray<T>()
         {
-            return Get(key,defaultValue);
-        }
-
-        public float GetFloat(string key)
-        {
-            return Get<float>(key);
-        }
-
-        public int GetInt(string key, int defaultValue)
-        {
-            return Get(key, defaultValue);
-        }
-
-        public int GetInt(string key)
-        {
-            return Get<int>(key);
-        }
-
-        public bool GetBool(string key, bool defaultValue)
-        {
-            return Get(key, defaultValue);
-        }
-
-        public bool GetBool(string key)
-        {
-            return Get<bool>(key);
-        }
-
-        public string GetString(string key, string defaultValue)
-        {
-            return Get(key, defaultValue);
-        }
-
-        public string GetString(string key)
-        {
-            return Get<string>(key);
+            if (IsArray)
+            {
+                var list = new T[Count];
+                for (int i = 0; i < Count; i++)
+                {
+                    list[i] = ((T) Convert.ChangeType(this[i].ToString(), typeof (T), CultureInfo.InvariantCulture));
+                }
+                return list;
+            }
+            return null;
         }
 
         public void Remove(object key)

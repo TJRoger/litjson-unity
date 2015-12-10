@@ -599,7 +599,7 @@ namespace LitJson
                 };
                 
             
-            /// extended for Unity
+            // extended for Unity
 			base_exporters_table [typeof(Vector2)] = ExportVector2;    
             base_exporters_table [typeof(Vector3)] = ExportVector3;
 			base_exporters_table [typeof(Vector4)] = ExportVector4;
@@ -609,7 +609,6 @@ namespace LitJson
 			base_exporters_table [typeof(Ray)] = ExportRay;
 			base_exporters_table [typeof(Rect)] = ExportRect;
 			base_exporters_table [typeof(Quaternion)] = ExportQuaternion;
-//			base_exporters_table [typeof(Transform)] = ExportTransform;
         }
 
         private static void ExportVector2 (object obj, JsonWriter writer)
@@ -731,20 +730,6 @@ namespace LitJson
 				writer.Write (v.w);
 				writer.WriteObjectEnd ();
 		}
-
-//		private static void ExportTransform (object obj, JsonWriter writer)
-//		{
-//				Transform v = (Transform)obj;
-//				writer.WriteObjectStart ();
-//				writer.WritePropertyName ("localPosition");
-//				ExportVector3(v.localPosition, writer);
-//				writer.WritePropertyName ("localRotation");
-//				ExportQuaternion (v.localRotation, writer);
-//				writer.WritePropertyName ("localScale");
-//				ExportVector3 (v.localScale, writer);
-//				writer.WriteObjectEnd ();
-//		}
-
 
         private static void RegisterBaseImporters ()
         {
