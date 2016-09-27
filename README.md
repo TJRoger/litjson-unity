@@ -2,6 +2,7 @@ fork from https://github.com/TMPxyz/LitJSON-for-Unity
 ## Update
 + update to [latest version](https://github.com/lbv/litjson)
 + add some useful functions
++ now can work on i18n runtime witch is not use "." as decimal mark
 
 
 > LitJSON for Unity
