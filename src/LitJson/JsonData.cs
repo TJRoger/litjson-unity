@@ -1091,7 +1091,7 @@ namespace LitJson
                     return inst_boolean.ToString();
 
                 case JsonType.Double:
-                    return inst_double.ToString();
+                    return inst_double.ToString(CultureInfo.InvariantCulture);
 
                 case JsonType.Int:
                     return inst_int.ToString();
@@ -1121,8 +1121,9 @@ namespace LitJson
             {
                 return (T) Convert.ChangeType(Get(key).ToString(), typeof (T), CultureInfo.InvariantCulture);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Log.Error(e);
                 return defaultValue;
             }
         }
@@ -1134,7 +1135,7 @@ namespace LitJson
                 var list = new T[Count];
                 for (int i = 0; i < Count; i++)
                 {
-                    list[i] = ((T) Convert.ChangeType(this[i].ToString(), typeof (T), CultureInfo.InvariantCulture));
+                    list[i] = (T) Convert.ChangeType(this[i].ToString(), typeof (T), CultureInfo.InvariantCulture);
                 }
                 return list;
             }
